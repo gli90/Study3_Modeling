@@ -1,6 +1,5 @@
 # Computational Metacognition
-Computational Modeling for Metacognition
-
+Computational models of perception, confidence, and metacognition.
 
 This repository documents my learning journey and research code for computational models of perception, confidence, and metacognition.
 
