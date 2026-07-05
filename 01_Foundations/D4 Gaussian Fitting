@@ -1,0 +1,236 @@
+# =====================================================
+# Day 4
+# Gaussian Model Fitting
+# Fit a Gaussian Distribution to Observed Data
+# =====================================================
+
+# Day 4：双参数 MLE（μ 和 σ）超详细注释版
+
+# import numpy as np
+# from scipy.optimize import minimize
+# # =====================================================
+# # 1. 生成“真实世界”的数据
+# # =====================================================
+# # 真实均值（真实世界里通常不知道）
+# # 这里设为 3
+# true_mu = 3
+# # 真实标准差（噪声大小）
+# # 这里设为 2
+# true_sigma = 2
+# # 生成 1000 个随机数据点
+# # loc = 均值
+# # scale = 标准差
+# # size = 数据个数
+# data = np.random.normal(
+#     loc=true_mu,
+#     scale=true_sigma,
+#     size=1000
+# )
+# # observed_data = “你真正观测到的数据”
+# # 在现实实验里，你只会拿到这些数据
+# observed_data = data
+# # =====================================================
+# # 2. 定义 negative log-likelihood
+# # =====================================================
+# # optimize.minimize() 的工作方式：
+# # 它会不断尝试不同参数
+# # 然后找“最小值”
+# # 所以：
+# # 我们不直接写 likelihood
+# # 而写：negative log-likelihood（负对数似然）
+# # 参数 params 是一个列表：
+# # params = [mu, sigma]
+# # 例如：
+# # params = [3, 2]
+# # 表示：
+# # mu = 3
+# # sigma = 2
+# def neg_log_likelihood(params):
+#     # =================================================
+#     # 从 params 中拆出 mu 和 sigma
+#     # =================================================
+#     # 第一个参数
+#     mu = params[0]
+#     # 第二个参数
+#     sigma = params[1]
+#     # =================================================
+#     # 安全检查
+#     # =================================================
+#     # sigma 是标准差
+#     # 标准差不可能 <= 0
+#     # 如果 sigma 非法
+#     # 返回无穷大（非常差）
+#     # 告诉优化器：
+#     # “不要选这个参数”
+#     if sigma <= 0:
+#         return np.inf
+#     # =================================================
+#     # 计算 negative log-likelihood
+#     # =================================================
+#     # 这是高斯分布（normal distribution）
+#     # 的 negative log-likelihood 形式
+#     # 它衡量：
+#     # “当前 mu 和 sigma
+#     # 能多好解释这些数据？”
+#     nll = np.mean(
+#         # -----------------------------
+#         # 第一部分：log(sigma)
+#         # -----------------------------
+#         # sigma 越大
+#         # 分布越平
+#         # 不确定性越高
+#         # 这一项会惩罚过大的 sigma
+#         np.log(sigma)
+#         +
+#         # -----------------------------
+#         # 第二部分：平方误差
+#         # -----------------------------
+#         # observed_data - mu
+#         # = 数据离 mu 多远
+#         # / sigma
+#         # = 根据噪声大小调整误差
+#         # ** 2
+#         # = 平方误差
+#         0.5 * ((observed_data - mu) / sigma) ** 2
+#     )
+#     # 返回最终误差
+#     return nll
+# # =====================================================
+# # 3. 给优化器一个“起始点”
+# # =====================================================
+# # initial_guess = 初始猜测
+# # [0, 1] 表示：
+# # “先从 mu=0, sigma=1 开始试”
+# # optimize.minimize() 会从这里开始搜索
+# initial_guess = [0, 1]
+# # =====================================================
+# # 4. 开始优化
+# # =====================================================
+# # minimize() 会：
+# # 1. 尝试不同 mu
+# # 2. 尝试不同 sigma
+# # 3. 比较哪个最好
+# # 4. 最后找到最优参数
+# result = minimize(
+#     neg_log_likelihood,
+#     initial_guess
+# )
+# # =====================================================
+# # 5. 取出优化后的参数
+# # =====================================================
+# # result.x
+# # 里面存的是：
+# # [最佳mu, 最佳sigma]
+# estimated_mu = result.x[0]
+# estimated_sigma = result.x[1]
+# # =====================================================
+# # 6. 输出结果
+# # =====================================================
+# print("True mu =", true_mu)
+# print("Estimated mu =", estimated_mu)
+# print("True sigma =", true_sigma)
+# print("Estimated sigma =", estimated_sigma)
+
+# ⸻
+
+# Day 4 真正核心（必须理解）
+
+# 以前：
+
+# mu
+
+# 只有一个参数。
+
+# 现在：
+
+# [mu, sigma]
+
+# 你已经进入：
+
+# 多参数优化（multi-parameter optimization）
+
+# ⸻
+
+# Day 4 最重要的一句话
+
+# 你现在在做：
+
+# 从数据同时反推：
+
+# * 信号中心（μ）
+# * 噪声大小（σ）
+
+# ⸻
+
+# 为什么这一步重要？
+
+# 现实研究里：
+
+# * bias
+# * internal noise
+# * uncertainty
+# * prior width
+# * sensitivity
+
+# 这些都不是直接看到的。
+
+# 你必须：
+
+# 用数据把它们“拟合”出来。
+
+# 这就是 computational modeling 的核心思想。
+
+
+
+
+
+import numpy as np
+from scipy.optimize import minimize
+
+# 1. 生成数据
+true_mu = 3
+true_sigma = 2
+
+data = np.random.normal(
+    loc=true_mu,
+    scale=true_sigma,
+    size=1000
+)
+
+observed_data = data
+
+# 2. 定义 negative log-likelihood
+def neg_log_likelihood(params):
+
+    mu = params[0]
+    sigma = params[1]
+
+    if sigma <= 0:
+        return np.inf
+
+    nll = np.mean(
+        np.log(sigma)
+        + 0.5 * ((observed_data - mu) / sigma) ** 2
+    )
+
+    return nll
+
+# 3. 初始猜测
+initial_guess = [0, 1]
+
+# 4. 优化
+result = minimize(
+    neg_log_likelihood,
+    initial_guess
+)
+
+# 5. 提取结果
+estimated_mu = result.x[0]
+estimated_sigma = result.x[1]
+
+# 6. 输出
+print("True mu =", true_mu)
+print("Estimated mu =", estimated_mu)
+
+print("True sigma =", true_sigma)
+print("Estimated sigma =", estimated_sigma)
