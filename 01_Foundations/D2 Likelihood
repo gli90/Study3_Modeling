@@ -1,0 +1,42 @@
+# =====================================================
+# Day 2
+# Likelihood Function
+# Evaluate Parameter Likelihoods
+# =====================================================
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 1. 生成数据（正态分布）
+data = np.random.normal(loc=0, scale=1, size=1000)
+
+
+# 2. 画直方图
+plt.hist(data, bins=30)
+plt.title("loc=0,scale=x,size=1000")
+# plt.show()
+
+# Day 2: likelihood（核心）
+
+# 用 data 作为“观测数据”
+observed_data = data
+
+# 固定标准差（先不动它）
+sigma = 1
+
+# 测试不同的 mean（loc）
+mu_values = np.linspace(-10, 10, 200)
+
+likelihoods = []
+
+for mu in mu_values:
+    # 计算 likelihood（用 log 更稳定）
+    log_likelihood = -0.5 * np.mean(((observed_data - mu) / sigma) ** 2)
+    likelihoods.append(log_likelihood)
+
+# 画图
+plt.plot(mu_values, likelihoods)
+plt.xlabel("mu (mean)")
+plt.ylabel("log likelihood")
+plt.title("Likelihood as a function of mean")
+plt.show()
