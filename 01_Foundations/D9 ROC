@@ -1,0 +1,226 @@
+# =====================================================
+# Day 9
+# Receiver Operating Characteristic (ROC)
+# Evaluate Detection Performance Across Criteria
+# =====================================================
+
+# import numpy as np
+# import matplotlib.pyplot as plt
+
+# # =====================================================
+# # 1. Generate evidence distributions
+# # =====================================================
+
+# # SDT 核心思想：
+# # perception 不是 deterministic
+# # 而是 noisy evidence
+
+# # -----------------------------------------------------
+# # noise distribution
+# # -----------------------------------------------------
+
+# # noise-only trials
+
+# # loc=0:
+# # 没有 signal 时
+# # evidence 平均值 = 0
+
+# noise = np.random.normal(
+
+#     loc=0,
+
+#     scale=1,
+
+#     size=10000
+# )
+
+# # -----------------------------------------------------
+# # signal distribution
+# # -----------------------------------------------------
+
+# # signal present trials
+
+# # loc=2:
+# # signal 会让 evidence 往右移动
+
+# signal = np.random.normal(
+
+#     loc=2,
+
+#     scale=1,
+
+#     size=10000
+# )
+
+# # =====================================================
+# # 2. Decision criterion
+# # =====================================================
+
+# # criterion:
+# # decision threshold
+
+# # evidence > criterion:
+# # 回答：
+# # “我看到了”
+
+# criterion = 1
+
+# # =====================================================
+# # 3. Compute hit / false alarm
+# # =====================================================
+
+# # -----------------------------------------------------
+# # Hit rate
+# # -----------------------------------------------------
+
+# # signal 存在时：
+# # evidence 超过 criterion 的比例
+
+# hit_rate = np.mean(
+#     signal > criterion
+# )
+
+# # -----------------------------------------------------
+# # False alarm rate
+# # -----------------------------------------------------
+
+# # 没有 signal 时：
+# # evidence 超过 criterion 的比例
+
+# false_alarm_rate = np.mean(
+#     noise > criterion
+# )
+
+# print("Hit Rate =", hit_rate)
+
+# print(
+#     "False Alarm Rate =",
+#     false_alarm_rate
+# )
+
+# # =====================================================
+# # 4. Plot
+# # =====================================================
+
+# # noise distribution
+# plt.hist(
+
+#     noise,
+
+#     bins=100,
+
+#     density=True,
+
+#     alpha=0.5,
+
+#     label="Noise"
+# )
+
+# # signal distribution
+# plt.hist(
+
+#     signal,
+
+#     bins=100,
+
+#     density=True,
+
+#     alpha=0.5,
+
+#     label="Signal"
+# )
+
+# # criterion line
+# plt.axvline(
+
+#     criterion,
+
+#     color="black",
+
+#     linestyle="--",
+
+#     label="Criterion"
+# )
+
+# plt.xlabel("Internal Evidence")
+
+# plt.ylabel("Density")
+
+# plt.legend()
+
+# plt.show()
+
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# =========================================
+# 1. Generate evidence distributions
+# =========================================
+
+noise = np.random.normal(
+    loc=0,
+    scale=1,
+    size=10000
+)
+
+signal = np.random.normal(
+    loc=2,
+    scale=1,
+    size=10000
+)
+
+# =========================================
+# 2. Decision criterion
+# =========================================
+
+criterion = 0
+
+# =========================================
+# 3. Compute hit / false alarm
+# =========================================
+
+hit_rate = np.mean(signal > criterion)
+
+false_alarm_rate = np.mean(noise > criterion)
+
+print("Hit Rate =", hit_rate)
+
+print("False Alarm Rate =", false_alarm_rate)
+
+# =========================================
+# 4. Plot
+# =========================================
+
+plt.hist(
+    noise,
+    bins=100,
+    density=True,
+    alpha=0.5,
+    label="Noise"
+)
+
+plt.hist(
+    signal,
+    bins=100,
+    density=True,
+    alpha=0.5,
+    label="Signal"
+)
+
+plt.axvline(
+    criterion,
+    color="black",
+    linestyle="--",
+    label="Criterion"
+)
+
+plt.xlabel("Internal Evidence")
+plt.ylabel("Density")
+
+plt.legend()
+
+plt.show()
