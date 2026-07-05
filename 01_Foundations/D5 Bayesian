@@ -1,0 +1,245 @@
+# =====================================================
+# Day 5
+# Bayesian Inference
+# Update Beliefs Using Bayes' Rule
+# =====================================================
+
+# import numpy as np
+# import matplotlib.pyplot as plt
+
+# # =====================================================
+# # 1. 假设我们观测到一个数据
+# # =====================================================
+
+# # observed_data:
+# # “我们真正看到的数据”
+
+# # 这里假设：
+# # 我们观测到的数据是 4
+
+# observed_data = 4
+
+# # =====================================================
+# # 2. 创建很多 candidate mu
+# # =====================================================
+
+# # Bayesian 的核心思想：
+# # “不要只测试一个 mu”
+# # 而是：
+# # “测试很多可能的 mu”
+
+# # np.linspace(a, b, n)
+# # = 在 a 到 b 之间均匀生成 n 个点
+
+# mu_values = np.linspace(-5, 10, 500)
+
+# # =====================================================
+# # 3. 定义 PRIOR
+# # =====================================================
+
+# # PRIOR:
+# # “在看到数据之前，
+# # 我原本相信哪些 mu 更可能？”
+
+# # 这里假设：
+# # 我原本认为：
+# # mu 大概在 0 附近
+
+# prior_mean = 0
+
+# # prior_sigma:
+# # prior 的宽度
+
+# # sigma 越大：
+# # prior 越宽
+# # 表示：
+# # “我没那么确定”
+
+# prior_sigma = 2
+
+# # =====================================================
+# # 计算 prior curve
+# # =====================================================
+
+# # 这是 Gaussian prior
+
+# # 它会生成一个钟形曲线
+
+# # 峰值在：
+# # prior_mean = 0
+
+# prior = np.exp(
+
+#     # Gaussian exponent 部分
+
+#     -0.5 *
+
+#     (
+#         (
+#             mu_values - prior_mean
+#         )
+
+#         / prior_sigma
+
+#     ) ** 2
+# )
+
+# # =====================================================
+# # 4. 定义 LIKELIHOOD
+# # =====================================================
+
+# # likelihood:
+# # “当前 mu
+# # 能多好解释 observed_data？”
+
+# # likelihood_sigma:
+# # 数据噪声大小
+
+# likelihood_sigma = 1
+
+# # likelihood curve
+
+# # observed_data = 4
+# # 所以 likelihood 峰值会在 4 附近
+
+# likelihood = np.exp(
+
+#     -0.5 *
+
+#     (
+#         (
+#             observed_data - mu_values
+#         )
+
+#         / likelihood_sigma
+
+#     ) ** 2
+# )
+
+# # =====================================================
+# # 5. 计算 POSTERIOR
+# # =====================================================
+
+# # Bayesian 核心：
+
+# # posterior ∝ prior × likelihood
+
+# # 意思：
+# # “新的相信”
+# # =
+# # “原本相信”
+# # ×
+# # “数据支持”
+
+# posterior = prior * likelihood
+
+# # =====================================================
+# # normalize（归一化）
+# # =====================================================
+
+# # 为什么需要 normalize？
+
+# # 因为：
+# # prior × likelihood
+# # 得到的数值：
+# # 还不是真正概率
+
+# # 概率分布需要：
+# # “总和 = 1”
+
+# # 所以：
+# # 用总和去除
+
+# posterior = posterior / np.sum(posterior)
+
+# # =====================================================
+# # 6. 作图
+# # =====================================================
+
+# # prior curve
+# plt.plot(
+#     mu_values,
+#     prior,
+#     label="Prior"
+# )
+
+# # likelihood curve
+# plt.plot(
+#     mu_values,
+#     likelihood,
+#     label="Likelihood"
+# )
+
+# # posterior curve
+# plt.plot(
+#     mu_values,
+#     posterior,
+#     label="Posterior"
+# )
+
+# # x轴名字
+# plt.xlabel("mu")
+
+# # y轴名字
+# plt.ylabel("Probability")
+
+# # 显示图例
+# plt.legend()
+
+# # 显示图像
+# plt.show()
+
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 1. 观测数据
+observed_data = 4
+
+# 2. 候选 mu
+mu_values = np.linspace(-5, 10, 500)
+
+# 3. Prior
+prior_mean = 0
+prior_sigma = 2
+
+prior = np.exp(
+    -0.5 * ((mu_values - prior_mean) / prior_sigma) ** 2
+)
+
+# 4. Likelihood
+likelihood_sigma = 1
+
+likelihood = np.exp(
+    -0.5 * ((observed_data - mu_values) / likelihood_sigma) ** 2
+)
+
+# 5. Posterior
+posterior = prior * likelihood
+
+posterior = posterior / np.sum(posterior)
+
+# 6. Plot
+plt.plot(mu_values, prior, label="Prior")
+
+plt.plot(
+    mu_values,
+    likelihood,
+    label="Likelihood"
+)
+
+plt.plot(
+    mu_values,
+    posterior,
+    label="Posterior"
+)
+
+plt.xlabel("mu")
+plt.ylabel("Probability")
+
+plt.legend()
+
+plt.show()
