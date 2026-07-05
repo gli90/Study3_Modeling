@@ -1,0 +1,218 @@
+# =====================================================
+# Day 8
+# Signal Detection Theory (SDT)
+# Model Perceptual Decisions Under Uncertainty
+# =====================================================
+
+# import numpy as np
+# import matplotlib.pyplot as plt
+
+# # =====================================================
+# # 1. candidate stimulus positions
+# # =====================================================
+
+# # 测试很多可能的位置
+
+# x_values = np.linspace(-5, 15, 500)
+
+# # =====================================================
+# # 2. visual cue
+# # =====================================================
+
+# # vision 认为：
+# # 物体大概在 5
+
+# visual_mean = 5
+
+# # visual sigma 小
+# # = vision 很可靠
+
+# visual_sigma = 1
+
+# # Gaussian visual likelihood
+
+# visual = np.exp(
+
+#     -0.5 *
+
+#     (
+#         (x_values - visual_mean)
+#         / visual_sigma
+#     ) ** 2
+# )
+
+# # normalize
+
+# visual = visual / np.sum(visual)
+
+# # =====================================================
+# # 3. auditory cue
+# # =====================================================
+
+# # audition 认为：
+# # 物体大概在 8
+
+# auditory_mean = 8
+
+# # auditory sigma 大
+# # = audition 更 noisy
+
+# auditory_sigma = 3
+
+# # auditory likelihood
+
+# auditory = np.exp(
+
+#     -0.5 *
+
+#     (
+#         (x_values - auditory_mean)
+#         / auditory_sigma
+#     ) ** 2
+# )
+
+# # normalize
+
+# auditory = auditory / np.sum(auditory)
+
+# # =====================================================
+# # 4. Bayesian integration
+# # =====================================================
+
+# # Bayesian cue integration:
+# # posterior ∝ visual × auditory
+
+# posterior = visual * auditory
+
+# posterior = posterior / np.sum(posterior)
+
+# # =====================================================
+# # 5. MAP estimate
+# # =====================================================
+
+# # posterior 峰值位置
+
+# map_x = x_values[
+#     np.argmax(posterior)
+# ]
+
+# print("Integrated MAP =", map_x)
+
+# # =====================================================
+# # 6. Plot
+# # =====================================================
+
+# # visual cue
+# plt.plot(
+#     x_values,
+#     visual,
+#     label="Visual Cue"
+# )
+
+# # auditory cue
+# plt.plot(
+#     x_values,
+#     auditory,
+#     label="Auditory Cue"
+# )
+
+# # integrated posterior
+# plt.plot(
+#     x_values,
+#     posterior,
+#     label="Integrated Posterior"
+# )
+
+# plt.xlabel("Stimulus Position")
+
+# plt.ylabel("Probability")
+
+# plt.legend()
+
+# plt.show()
+
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# =========================================
+# 1. candidate stimulus positions
+# =========================================
+
+x_values = np.linspace(-5, 15, 500)
+
+# =========================================
+# 2. visual cue
+# =========================================
+
+visual_mean = 5
+visual_sigma = 3
+
+visual = np.exp(
+    -0.5 *
+    ((x_values - visual_mean) / visual_sigma) ** 2
+)
+
+visual = visual / np.sum(visual)
+
+# =========================================
+# 3. auditory cue
+# =========================================
+
+auditory_mean = 8
+auditory_sigma = 3
+
+auditory = np.exp(
+    -0.5 *
+    ((x_values - auditory_mean) / auditory_sigma) ** 2
+)
+
+auditory = auditory / np.sum(auditory)
+
+# =========================================
+# 4. Bayesian integration
+# =========================================
+
+posterior = visual * auditory
+
+posterior = posterior / np.sum(posterior)
+
+# =========================================
+# 5. MAP estimate
+# =========================================
+
+map_x = x_values[np.argmax(posterior)]
+
+print("Integrated MAP =", map_x)
+
+# =========================================
+# 6. Plot
+# =========================================
+
+plt.plot(
+    x_values,
+    visual,
+    label="Visual Cue"
+)
+
+plt.plot(
+    x_values,
+    auditory,
+    label="Auditory Cue"
+)
+
+plt.plot(
+    x_values,
+    posterior,
+    label="Integrated Posterior"
+)
+
+plt.xlabel("Stimulus Position")
+plt.ylabel("Probability")
+
+plt.legend()
+
+plt.show()
