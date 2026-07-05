@@ -1,0 +1,120 @@
+# =====================================================
+# Day 10
+# Psychometric Function
+# Model Detection Probability with a Sigmoid Function
+# =====================================================
+
+# import numpy as np
+# import matplotlib.pyplot as plt
+
+# # =====================================================
+# # 1. stimulus strengths
+# # =====================================================
+
+# # 不同刺激强度
+
+# # 比如：
+# # contrast
+# # brightness
+# # sound intensity
+
+# stimulus_levels = np.linspace(
+#     0,
+#     10,
+#     100
+# )
+
+# # =====================================================
+# # 2. psychometric function
+# # =====================================================
+
+# # threshold:
+# # 50% detection point
+
+# threshold = 5
+
+# # slope:
+# # transition sharpness
+
+# slope = 1
+
+# # logistic psychometric function
+
+# detection_probability = 1 / (
+
+#     1 +
+
+#     np.exp(
+
+#         -(
+#             stimulus_levels
+#             - threshold
+#         ) / slope
+#     )
+# )
+
+# # =====================================================
+# # 3. Plot
+# # =====================================================
+
+# plt.plot(
+#     stimulus_levels,
+#     detection_probability
+# )
+
+# plt.xlabel(
+#     "Stimulus Strength"
+# )
+
+# plt.ylabel(
+#     "P(Detected)"
+# )
+
+# plt.title(
+#     "Psychometric Function"
+# )
+
+# plt.show()
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# =========================================
+# 1. stimulus strengths
+# =========================================
+
+stimulus_levels = np.linspace(0, 10, 100)
+
+# =========================================
+# 2. psychometric function
+# =========================================
+
+threshold = 5
+
+slope = 1
+
+detection_probability = 1 / (
+    1 + np.exp(
+        -(stimulus_levels - threshold) / slope
+    )
+)
+
+# =========================================
+# 3. Plot
+# =========================================
+
+plt.plot(
+    stimulus_levels,
+    detection_probability
+)
+
+plt.xlabel("Stimulus Strength")
+
+plt.ylabel("P(Detected)")
+
+plt.title("Psychometric Function")
+
+plt.show()
